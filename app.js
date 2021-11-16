@@ -14,7 +14,7 @@ app.use(express.urlencoded({extended: false}));
     res.send('<h2>users page</h2>');
 });*/
 
-app.use(adminRouter);
+app.use('/admin', adminRouter);
 app.use(shopRouter);
 
 app.use((req, res, next) => {
