@@ -10,8 +10,8 @@ const shopRouter = require('./routes/shop');
 
 const app = express();
 
-app.engine('handlebars', handlebars());
-app.set('view engine', 'handlebars');
+app.engine('hbs', handlebars());
+app.set('view engine', 'hbs');
 app.set('views', 'views'); //default folder is /views, so not required here
 
 app.use(express.json());
