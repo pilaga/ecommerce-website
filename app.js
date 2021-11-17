@@ -1,7 +1,6 @@
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-const handlebars = require('express-handlebars');
 
 const rootDir = require('./utils/path_helper');
 
