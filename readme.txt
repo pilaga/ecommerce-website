@@ -1,0 +1,1 @@
+Complete NodeJS implementation of an online shop application using ExpressJS, GraphQL APIs, MongoDB, SQL, Pug

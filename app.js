@@ -9,14 +9,12 @@ const shopRouter = require('./routes/shop');
 
 const app = express();
 
+app.set('view engine', 'pug'); //register pug templating engine
+//app.set('views', 'views'); //default folder is /views, so not required here
+
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-/*app.use('/users', (req, res, next) => {
-    res.send('<h2>users page</h2>');
-});*/
 
 app.use('/admin', adminData.routes);
 app.use(shopRouter);
