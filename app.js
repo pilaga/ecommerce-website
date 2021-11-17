@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
+const handlebars = require('express-handlebars');
 
 const rootDir = require('./utils/path_helper');
 
@@ -9,8 +10,9 @@ const shopRouter = require('./routes/shop');
 
 const app = express();
 
-app.set('view engine', 'pug'); //register pug templating engine
-//app.set('views', 'views'); //default folder is /views, so not required here
+app.engine('handlebars', handlebars());
+app.set('view engine', 'handlebars');
+app.set('views', 'views'); //default folder is /views, so not required here
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
