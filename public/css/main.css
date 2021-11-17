@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Montserrat&display=swap');
+
 body {
     padding: 0;
     margin: 0;
-    font-family: sans-serif;
+    font-family: 'Didact Gothic', sans-serif;
 }
 
 main {
