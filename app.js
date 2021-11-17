@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 
 const rootDir = require('./utils/path_helper');
 
-const adminRouter = require('./routes/admin');
+const adminData = require('./routes/admin');
 const shopRouter = require('./routes/shop');
 
 const app = express();
@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
     res.send('<h2>users page</h2>');
 });*/
 
-app.use('/admin', adminRouter);
+app.use('/admin', adminData.routes);
 app.use(shopRouter);
 
 app.use((req, res, next) => {
