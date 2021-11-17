@@ -11,10 +11,12 @@ router.get('/', (req, res, next) => {
     const products = adminData.products;
     res.render('shop', 
         { 
+            products: products,
             pagetitle: 'My Shop', 
             path: "/", 
             hasProducts: products.length > 0, 
-            products: products 
+            activeShop: true,
+            productCSS: true            
         }); //no need .pug because we set pug as default
 });
 
