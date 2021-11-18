@@ -3,6 +3,6 @@ exports.get404 = (req, res, next) => {
     .render('404', 
         { 
             pagetitle: "Page not found!",
-            path: "404"
+            path: "/404"
         });
 }
