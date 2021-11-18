@@ -2,21 +2,26 @@ const fs = require('fs');
 const path = require('path');
 const rootDir = require('../utils/path_helper');
 
+const filepath = path.join(rootDir, 'data', 'products.json');
+
+const getProductsFromFile = (cb) => {
+    //retrieve and parse file content
+    fs.readFile(filepath, (err, data) => {
+        if(err) {
+            cb([]);
+        } else {
+            cb(JSON.parse(data));
+        }
+    });
+}
+
 module.exports = class Product {
     constructor(title) {
         this.title = title;
     }
 
     save() {
-        const filepath = path.join(rootDir, 'data', 'products.json');
-
-        //read file first
-        fs.readFile(filepath, (err, data) => { 
-            let products = [];   
-            //if file exists, read existing products from file       
-            if(!err) {   
-                products = JSON.parse(data);
-            }
+        getProductsFromFile((products) => {
             //add new product
             products.push(this);             
             //write file again
@@ -27,14 +32,6 @@ module.exports = class Product {
     }
 
     static fetchAll(cb) { //pass callback function as argument
-        const filepath = path.join(rootDir, 'data', 'products.json');
-
-        //retrieve and parse file content
-        fs.readFile(filepath, (err, data) => {
-            if(err) {
-                cb([]);
-            }
-            cb(JSON.parse(data));
-        });
+        getProductsFromFile(cb);
     }
 }
