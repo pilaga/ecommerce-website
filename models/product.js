@@ -26,15 +26,15 @@ module.exports = class Product {
         });
     }
 
-    static fetchAll() {
+    static fetchAll(cb) { //pass callback function as argument
         const filepath = path.join(rootDir, 'data', 'products.json');
 
         //retrieve and parse file content
         fs.readFile(filepath, (err, data) => {
             if(err) {
-                return [];
+                cb([]);
             }
-            return JSON.parse(data);
+            cb(JSON.parse(data));
         });
     }
 }
