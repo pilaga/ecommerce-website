@@ -14,19 +14,16 @@ exports.getAddProduct = (req, res, next) => {
 exports.postAddProduct = (req, res, next) => {
     const product = new Product(req.body.title);
     product.save();
-    res.redirect('/');
+    res.redirect('/products');
 }
 
-exports.getProducts = (req, res, next) => { 
+exports.getProducts = (req, res, next) => {
     const products = Product.fetchAll((products) => {
-        res.render('./shop/product-list', 
+        res.render('./admin/product-store', 
             { 
                 products: products,
-                pagetitle: 'My Shop', 
-                path: "/", 
-                hasProducts: products.length > 0, 
-                activeShop: true,
-                productCSS: true            
+                pagetitle: 'Product Store (Admin)', 
+                path: "/admin/product-store"          
             });
-    });    
+    });
 }
