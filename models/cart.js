@@ -56,6 +56,9 @@ module.exports = class Cart {
             let cart = JSON.parse(data);
             const updatedCart = { ...cart };
             const product = updatedCart.products.find(item => item.id === id);
+            if(!product) { //do not do anything if product is not in cart
+                return;
+            }
             const productQty = product.quantity;
             updatedCart.products = updatedCart.products.filter(item => item.id !== id); //remove product from cart
             updatedCart.totalprice = updatedCart.totalprice - price * productQty; //adjust cart total price
