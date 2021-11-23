@@ -1,3 +1,4 @@
+const e = require('express');
 const fs = require('fs');
 const path = require('path');
 const rootDir = require('../utils/path_helper');
@@ -16,23 +17,34 @@ const getProductsFromFile = (cb) => {
 }
 
 module.exports = class Product {
-    constructor(title, price, description, image) {
+    constructor(id, title, price, description, image) {
+        this.id = id;
         this.title = title;
         this.price = price;
         this.description = description;
         this.image = image;
     }
 
-    save() {
-
-        this.id = Math.random().toString();
+    save() {       
         getProductsFromFile((products) => {
-            //add new product
-            products.push(this);             
-            //write file again
-            fs.writeFile(filepath, JSON.stringify(products), (err) => {
-                console.log("Error:", err);
-            });
+            if(this.id) { //if product exists (id not null) - then update it
+                const existingProductIndex = products.findIndex(item => item.id === this.id);
+                const updatedProducts = [...products];
+                updatedProducts[existingProductIndex] = this;
+                //write file again
+                fs.writeFile(filepath, JSON.stringify(updatedProducts), (err) => {
+                    console.log("Error:", err);
+                });
+
+            } else { //if product doesn't already exist  
+                this.id = Math.random().toString();
+                //add new product
+                products.push(this);             
+                //write file again
+                fs.writeFile(filepath, JSON.stringify(products), (err) => {
+                    console.log("Error:", err);
+                });
+            }
         });
     }
 
