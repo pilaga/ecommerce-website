@@ -43,8 +43,23 @@ module.exports = class Product {
                 //write file again
                 fs.writeFile(filepath, JSON.stringify(products), (err) => {
                     console.log("Error:", err);
-                });
+                });                
             }
+        });
+    }
+
+    static deleteProductById(productId) {
+        getProductsFromFile((products) => {
+            //Method 01
+            /*const existingProductIndex = products.findIndex(item => item.id === productId);
+            const updatedProducts = [...products];
+            updatedProducts.splice(existingProductIndex, 1);*/
+            //Method 02 - shorter
+            const updatedProducts = products.filter(prod => prod.id !== id);
+            //write file again
+            fs.writeFile(filepath, JSON.stringify(updatedProducts), (err) => {
+                console.log("Error:", err);
+            });
         });
     }
 
