@@ -1,21 +1,9 @@
-const e = require('express');
-const fs = require('fs');
-const path = require('path');
-const rootDir = require('../utils/path_helper');
-
-const filepath = path.join(rootDir, 'data', 'products.json');
+const db = require('../utils/database');
 const Cart = require('./cart');
 
-const getProductsFromFile = (cb) => {
-    //retrieve and parse file content
-    fs.readFile(filepath, (err, data) => {
-        if(err) {
-            cb([]);
-        } else {
-            cb(JSON.parse(data));
-        }
-    });
-}
+
+
+
 
 module.exports = class Product {
     constructor(id, title, price, description, image) {
@@ -27,54 +15,18 @@ module.exports = class Product {
     }
 
     save() {       
-        getProductsFromFile((products) => {
-            if(this.id) { //if product exists (id not null) - then update it
-                const existingProductIndex = products.findIndex(item => item.id === this.id);
-                const updatedProducts = [...products];
-                updatedProducts[existingProductIndex] = this;
-                //write file again
-                fs.writeFile(filepath, JSON.stringify(updatedProducts), (err) => {
-                    console.log("Error:", err);
-                });
 
-            } else { //if product doesn't already exist  
-                this.id = Math.random().toString();
-                //add new product
-                products.push(this);             
-                //write file again
-                fs.writeFile(filepath, JSON.stringify(products), (err) => {
-                    console.log("Error:", err);
-                });                
-            }
-        });
     }
 
     static deleteProductById(productId) {
-        getProductsFromFile((products) => {
-            const product = products.find(item => item.id === productId);
-            //Method 01
-            /*const existingProductIndex = products.findIndex(item => item.id === productId);
-            const updatedProducts = [...products];
-            updatedProducts.splice(existingProductIndex, 1);*/
-            //Method 02 - shorter
-            const updatedProducts = products.filter(item => item.id !== productId);
-            //write file again
-            fs.writeFile(filepath, JSON.stringify(updatedProducts), (err) => {
-                if(!err) {
-                    Cart.deleteProduct(productId, product.price);
-                }
-            });
-        });
+
     }
 
-    static fetchAll(cb) { //pass callback function as argument
-        getProductsFromFile(cb);
+    static fetchAll() { //pass callback function as argument
+        return db.execute('SELECT * FROM product');
     }
 
-    static findById(id, cb) {
-        getProductsFromFile((products) => {
-            const product = products.find(item => item.id === id);
-            cb(product);
-        });
+    static findById(id) {
+
     }
 }

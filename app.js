@@ -12,14 +12,6 @@ const app = express();
 app.set('view engine', 'ejs');
 //app.set('views', 'views'); //default folder is /views, so not required here
 
-db.execute('SELECT * FROM product')
-    .then((result) => {
-        console.log(result[0], result[1]);
-    })
-    .catch((err) => {
-        console.log('Error:', err);
-    });
-
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
