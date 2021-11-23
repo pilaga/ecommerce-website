@@ -9,6 +9,15 @@
 
     <main>
         <h2>My Cart</h2>
+        <% if(products.length > 0) { %>
+            <ul>
+                <% products.forEach(item => { %>
+                    <li><%= item.product.title %> (<%= item.quantity %>)</li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <h3>No products in cart</h3>
+        <% } %>
     </main>
 
 <%- include('../includes/footer.ejs') %>
