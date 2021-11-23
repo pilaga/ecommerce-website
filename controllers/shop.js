@@ -17,14 +17,24 @@ exports.getProducts = (req, res, next) => {
 }
 
 exports.getProduct = (req, res, next) => {
-    Product.findById(req.params.productId, product => {
-        res.render('./shop/product-details',
+    Product.findById(req.params.productId)
+        .then(([product]) => {
+            res.render('./shop/product-details',
             {
-                product: product,
-                pagetitle: `Product informations: ${product.title}`,
+                product: product[0],
+                pagetitle: `Product informations: ${product[0].title}`,
                 path: "/products"
-            })      
-    });     
+            })  
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    
+    /*
+    
+    , product => {
+           
+    });    */ 
 }
 
 exports.getIndex = (req, res, next) => {
