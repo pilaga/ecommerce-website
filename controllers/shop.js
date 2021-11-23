@@ -4,7 +4,7 @@ const Cart = require('../models/cart');
 exports.getProducts = (req, res, next) => { 
     const products = Product.fetchAll()
         .then(([rows, fieldData]) => {
-            res.render('./shop/index', 
+            res.render('./shop/product-list', 
             { 
                 products: rows,
                 pagetitle: 'Product List', 
