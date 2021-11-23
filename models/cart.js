@@ -36,4 +36,22 @@ module.exports = class Cart {
             });            
         });     
     }
+
+    static deleteProduct(id, price) {
+        fs.readFile(filepath, (err, data) => {
+            if(err) { //we didn't find a cart = nothing to delete
+                return;
+            }
+            let cart = JSON.parse(data);
+            const updatedCart = { ...cart };
+            const product = updatedCart.products.find(item => item.id === id);
+            const productQty = product.quantity;
+            updatedCart.products = updatedCart.products.filter(item => item.id !== id); //remove product from cart
+            updatedCart.totalprice = updatedCart.totalprice - price * productQty; //adjust cart total price
+            //save cart back to file
+            fs.writeFile(filepath, JSON.stringify(updatedCart), (err) => {
+                console.log('save cart error', err);
+            });   
+        });
+    }
 }
