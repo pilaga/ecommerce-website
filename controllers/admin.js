@@ -24,6 +24,7 @@ exports.postAddProduct = (req, res, next) => {
     })
     .then(result => {
         //console.log(result);
+        res.redirect('/admin/product-store');
     })
     .catch(err => {
         console.log(err);
