@@ -9,6 +9,22 @@
 
     <main>
         <h2>Orders</h2>
+        <% if(orders.length <= 0) { %>
+            <h3>Nothing here!</h3>
+        <% } else { %>
+            <ul>
+            <% orders.forEach(order => { %>
+                <li class="cart_item">
+                    <h3>#<%= order.id %></h3>
+                    <ul>
+                        <% order.products.forEach(product => { %>
+                        <li><%= product.title %> (<%= product.orderItem.quantity %>)</li>
+                        <%  }); %>
+                    </ul>
+                </li>
+            <% }); %>
+            </ul>
+        <% } %>
     </main>
 
 <%- include('../includes/footer.ejs') %>
