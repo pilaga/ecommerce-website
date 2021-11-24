@@ -16,7 +16,7 @@ exports.postAddProduct = (req, res, next) => {
     const image = req.body.image;
     const desc = req.body.description;
     //create and save new product
-    Product.create({
+    req.user.createProduct({
         title: title,
         price: price,
         description: desc,
@@ -94,7 +94,7 @@ exports.postDeleteProduct = (req, res, next) => {
 }
 
 exports.getProducts = (req, res, next) => {
-    Product.findAll()
+    req.user.getProducts()
     .then(products => {
         res.render('./admin/product-store', 
             { 
