@@ -2,6 +2,7 @@
 
     <link rel="stylesheet" href="/css/forms.css">
     <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/cart.css">
 </head>
 <body>
     
@@ -10,13 +11,14 @@
     <main>
         <h2>My Cart</h2>
         <% if(products.length > 0) { %>
-            <ul>
+            <ul  class="cart_item-list">
                 <% products.forEach(item => { %>
-                    <li>
-                        <p><%= item.product.title %> (<%= item.quantity %>)</p>
+                    <li class="cart_item">
+                        <h3><%= item.title %></h3>
+                        <h4>Quantity: <%= item.cartItem.quantity %></h4>
                         <form action="/cart-delete-item" method="POST">
                             <button class="btn" type="submit">Remove</button>
-                            <input type="hidden" value="<%= item.product.id %>" name="productId">
+                            <input type="hidden" value="<%= item.id %>" name="productId">
                         </form>
                     </li>
                 <% }); %>
