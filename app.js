@@ -5,6 +5,8 @@ const errorController = require('./controllers/error');
 const sequelize = require('./utils/database');
 const Product = require('./models/product');
 const User = require('./models/user');
+const Cart = require('./models/cart');
+const CartItem = require('./models/cart-item');
 
 const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
@@ -36,33 +38,34 @@ app.use(errorController.get404);
 
 
 //association between models
-Product.belongsTo(User, {
-    constraints: true,
-    onDelete: 'CASCADE'
-});
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
 
-sequelize.sync({ force: true }) //sync({ force: true }) = forces overriding the tables
-    .then(result => {
-        return User.findByPk(1);        
-    })
-    .then(user => {
-        if(!user) {
-            return User.create({
-                name: 'Pierre',
-                email: 'pierre.lagadec@gmail.com'
-            });
-        }
+sequelize.sync() //sync({ force: true }) = forces overriding the tables
+.then(result => {
+    return User.findByPk(1);        
+})
+.then(user => {
+    if(!user) {
+        return User.create({
+            name: 'Pierre',
+            email: 'pierre.lagadec@gmail.com'
+        });
+    }
 
-        return Promise.resolve(user);
-    })
-    .then(user => {
-        //console.log(user);
-        app.listen(3000);
-    })
-    .catch(err => {
-        console.log(err);
-    });
+    return Promise.resolve(user);
+})
+.then(user => {
+    //console.log(user);
+    app.listen(3000);
+})
+.catch(err => {
+    console.log(err);
+});
 
 
 
