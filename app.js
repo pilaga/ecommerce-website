@@ -10,6 +10,7 @@ const CartItem = require('./models/cart-item');
 
 const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
+const { UniqueConstraintError } = require('sequelize/dist');
 
 const app = express();
 
@@ -60,6 +61,9 @@ sequelize.sync() //sync({ force: true }) = forces overriding the tables
     return Promise.resolve(user);
 })
 .then(user => {
+    return user.createCart();
+})
+.then(result => {
     //console.log(user);
     app.listen(3000);
 })
