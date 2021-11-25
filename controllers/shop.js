@@ -15,9 +15,9 @@ exports.getProducts = (req, res, next) => {
         console.log(err);
     });
 }
-/*
+
 exports.getProduct = (req, res, next) => {
-    Product.findByPk(req.params.productId)
+    Product.fetchById(req.params.productId)
     .then((product) => {
         res.render('./shop/product-details',
         {
@@ -30,7 +30,7 @@ exports.getProduct = (req, res, next) => {
         console.log(err);
     });
     
-}*/
+}
 
 exports.getIndex = (req, res, next) => {
     Product.fetchAll()
