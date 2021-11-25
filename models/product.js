@@ -10,7 +10,12 @@ class Product {
 
     //connect to mongodb and save
     save() {
-
+        const db = mongo.getDb();
+        return db.collection('product').insertOne(this)
+        .then(result => {
+            console.log(result);
+        })
+        .catch(err => console.log(err));
     }
 } 
 

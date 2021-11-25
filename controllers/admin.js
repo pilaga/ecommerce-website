@@ -16,7 +16,14 @@ exports.postAddProduct = (req, res, next) => {
     const image = req.body.image;
     const desc = req.body.description;
     //create and save new product
-    req.user.createProduct({
+    const product = new Product(title, price, desc, image);
+    product.save()
+    .then(result => {
+        res.redirect('/admin/product-store');
+    })
+    .catch(err => console.log(err));
+
+    /*req.user.createProduct({
         title: title,
         price: price,
         description: desc,
@@ -28,9 +35,9 @@ exports.postAddProduct = (req, res, next) => {
     })
     .catch(err => {
         console.log(err);
-    })    
+    })    */
 }
-
+/*
 exports.getEditProduct = (req, res, next) => {
     const editMode = req.query.edit; //always a string
     if(!editMode) {
@@ -106,4 +113,4 @@ exports.getProducts = (req, res, next) => {
     .catch(err => {
         console.log(err);
     })
-}
+}*/
