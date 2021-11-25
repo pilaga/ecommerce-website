@@ -2,17 +2,11 @@ const path = require('path');
 const express = require('express');
 
 const errorController = require('./controllers/error');
-const sequelize = require('./utils/database');
-const Product = require('./models/product');
-const User = require('./models/user');
-const Cart = require('./models/cart');
-const CartItem = require('./models/cart-item');
-const Order = require('./models/order');
-const OrderItem = require('./models/order-item');
+const mongo = require('./utils/database');
 
 const adminRouter = require('./routes/admin');
-const shopRouter = require('./routes/shop');
-const { UniqueConstraintError } = require('sequelize/dist');
+//const shopRouter = require('./routes/shop');
+
 
 const app = express();
 
@@ -23,8 +17,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use((req, res, next) => {
-    User.findByPk(1)
+/*app.use((req, res, next) => {
+    user.findByPk(1)
     .then(user => {
         req.user = user;
         next();
@@ -32,50 +26,17 @@ app.use((req, res, next) => {
     .catch(err => {
         console.log(err);
     })
-});
+});*/
 
 app.use('/admin', adminRouter);
-app.use(shopRouter);
+//app.use(shopRouter);
 
 app.use(errorController.get404);
 
-
-//association between models
-Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
-User.hasMany(Product);
-User.hasOne(Cart);
-Cart.belongsTo(User);
-Cart.belongsToMany(Product, { through: CartItem });
-Product.belongsToMany(Cart, { through: CartItem });
-Order.belongsTo(User);
-User.hasMany(Order);
-Order.belongsToMany(Product, { through: OrderItem });
-
-
-sequelize.sync() //sync({ force: true }) = forces overriding the tables
-.then(result => {
-    return User.findByPk(1);        
-})
-.then(user => {
-    if(!user) {
-        return User.create({
-            name: 'Pierre',
-            email: 'pierre.lagadec@gmail.com'
-        });
-    }
-
-    return Promise.resolve(user);
-})
-.then(user => {
-    return user.createCart();
-})
-.then(result => {
-    //console.log(user);
+mongo.connectDb(() => {
     app.listen(3000);
-})
-.catch(err => {
-    console.log(err);
 });
+
 
 
 

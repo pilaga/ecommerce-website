@@ -1,7 +1,20 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../utils/database');
+const mongo = require('../utils/database');
 
-const Product = sequelize.define('product', {
+class Product {
+    constructor(title, price, desc, image) {
+        this.title = title;
+        this.price = price;
+        this.description = desc;
+        this.image = image;
+    }
+
+    //connect to mongodb and save
+    save() {
+
+    }
+} 
+
+/*const Product = sequelize.define('product', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -24,6 +37,6 @@ const Product = sequelize.define('product', {
         type: Sequelize.STRING,
         allowNull: false
     }
-});
+});*/
 
 module.exports = Product;
