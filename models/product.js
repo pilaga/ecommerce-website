@@ -13,9 +13,19 @@ class Product {
         const db = mongo.getDb();
         return db.collection('product').insertOne(this)
         .then(result => {
-            console.log(result);
+            //console.log(result);
         })
         .catch(err => console.log(err));
+    }
+
+    static fetchAll() {
+        const db = mongo.getDb();
+        return db.collection('product').find().toArray()
+        .then(products => {
+            console.log(products);
+            return products;
+        })
+        .catch(err => console.log(err));     
     }
 } 
 

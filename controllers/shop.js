@@ -1,8 +1,8 @@
 const Product = require('../models/product');
-const Order = require('../models/order');
+//const Order = require('../models/order');
 
 exports.getProducts = (req, res, next) => { 
-    Product.findAll()
+    Product.fetchAll()
     .then(products => {
         res.render('./shop/product-list', 
             { 
@@ -15,7 +15,7 @@ exports.getProducts = (req, res, next) => {
         console.log(err);
     });
 }
-
+/*
 exports.getProduct = (req, res, next) => {
     Product.findByPk(req.params.productId)
     .then((product) => {
@@ -30,23 +30,10 @@ exports.getProduct = (req, res, next) => {
         console.log(err);
     });
     
-    //alternative with WHERE condition
-    /*Product.findAll({ where: { id: req.params.productId }})
-    .then((products) => {
-        res.render('./shop/product-details',
-        {
-            product: products[0],
-            pagetitle: `Product informations: ${products[0].title}`,
-            path: "/products"
-        })  
-    })
-    .catch(err => {
-        console.log(err);
-    });*/
-}
+}*/
 
 exports.getIndex = (req, res, next) => {
-    Product.findAll()
+    Product.fetchAll()
     .then(products => {
         res.render('./shop/index', 
             { 
@@ -60,6 +47,7 @@ exports.getIndex = (req, res, next) => {
     });
 }
 
+/*
 exports.getCart = (req, res, next) => {
     req.user.getCart()
     .then(cart => {
@@ -178,4 +166,4 @@ exports.postOrder = (req, res, next) => {
         res.redirect('/orders');
     })
     .catch(err => console.log(err));
-}
+}*/

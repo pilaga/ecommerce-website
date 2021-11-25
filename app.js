@@ -5,7 +5,7 @@ const errorController = require('./controllers/error');
 const mongo = require('./utils/database');
 
 const adminRouter = require('./routes/admin');
-//const shopRouter = require('./routes/shop');
+const shopRouter = require('./routes/shop');
 
 
 const app = express();
@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 });*/
 
 app.use('/admin', adminRouter);
-//app.use(shopRouter);
+app.use(shopRouter);
 
 app.use(errorController.get404);
 
