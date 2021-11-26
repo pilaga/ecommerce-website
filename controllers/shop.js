@@ -68,10 +68,19 @@ exports.getCart = (req, res, next) => {
         console.log(err);
     });
 } 
+*/
 
 exports.postCart = (req, res, next) => {
     const productId = req.body.productId;
-    let fetchedCart;
+    Product.fetchById(productId)
+    .then(product => {
+        return req.user.addToCart(product);
+    })
+    .then(result => {
+        console.log(result);
+    })
+    .catch(err => console.log(err));
+    /*let fetchedCart;
     let newQuantity;
     req.user.getCart()
     .then(cart => {
@@ -101,9 +110,10 @@ exports.postCart = (req, res, next) => {
     })
     .catch(err => {
         console.log(err);
-    });
+    });*/
 }
 
+/*
 exports.postCartDeleteProduct = (req, res, next) => {
     const productId = req.body.productId;
     req.user.getCart()

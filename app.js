@@ -23,7 +23,7 @@ app.use((req, res, next) => {
     .then(user => {
         //console.log(user);
         //console.log(user._id);
-        req.user = user;
+        req.user = new User(user.name, user.email, user.cart, user._id);
         next();
     })
     .catch(err => {
