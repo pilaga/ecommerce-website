@@ -3,6 +3,7 @@ const express = require('express');
 
 const errorController = require('./controllers/error');
 const mongo = require('./utils/database');
+const User = require('./models/user');
 
 const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
@@ -17,16 +18,18 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-/*app.use((req, res, next) => {
-    user.findByPk(1)
+app.use((req, res, next) => {
+    User.findById('61a03ef99146dac3693ce770')
     .then(user => {
+        //console.log(user);
+        //console.log(user._id);
         req.user = user;
         next();
     })
     .catch(err => {
         console.log(err);
-    })
-});*/
+    });
+});
 
 app.use('/admin', adminRouter);
 app.use(shopRouter);
