@@ -14,7 +14,7 @@ class User {
         return db.collection('user').insertOne(this);
     } 
     
-    addToCart(product) {
+    addItemToCart(product) {
         const cartProductIndex = this.cart.items.findIndex(item => {
             return item.productId.toString() === product._id.toString();
         });
@@ -27,6 +27,17 @@ class User {
         } else { //product doesnt exist
             updatedCartItems.push({ productId: new mongodb.ObjectId(product._id), quantity: newQuantity });
         }
+        
+        const updatedCart = { items: updatedCartItems };
+        const db = mongo.getDb();
+        return db.collection('user').updateOne(
+            { _id: new mongodb.ObjectId(this._id)}, 
+            { $set: { cart: updatedCart }}
+        );
+    }
+
+    removeItemFromCart(id) {
+        const updatedCartItems = this.cart.items.filter(item => item.productId.toString() !== id.toString());
         const updatedCart = { items: updatedCartItems };
         const db = mongo.getDb();
         return db.collection('user').updateOne(
@@ -49,6 +60,18 @@ class User {
                     return i.productId.toString() === item._id.toString();
                 }).quantity };
             });
+        });
+    }
+
+    addOrder() {
+        const db = mongo.getDb();
+        return db.collection('order').insertOne(this.cart)
+        .then(result => {
+            this.cart = { items: [] };
+            return db.collection('user').updateOne(
+                { _id: new mongodb.ObjectId(this._id)}, 
+                { $set: { cart: { items: [] }}}
+            );
         });
     }
 

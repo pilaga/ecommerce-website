@@ -71,8 +71,9 @@ exports.postEditProduct = (req, res, next) => {
     const updatedprice = req.body.price;
     const updatedimage = req.body.image;
     const updateddesc = req.body.description;
+    const userId = req.body.userId;
 
-    let product = new Product(updatedtitle, updatedprice, updateddesc, updatedimage, productId);
+    let product = new Product(updatedtitle, updatedprice, updateddesc, updatedimage, userId, productId);
     product.save()
     .then(result => {
         console.log('updated product: ', productId);
