@@ -1,4 +1,3 @@
-const { Double } = require('bson');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -20,6 +19,8 @@ const productSchema = new Schema({
         required: true
     }
 });
+
+module.exports = mongoose.model('Product', productSchema);
 
 // const mongodb = require('mongodb');
 // const mongo = require('../utils/database');
