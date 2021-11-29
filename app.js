@@ -2,7 +2,7 @@ const path = require('path');
 const express = require('express');
 
 const errorController = require('./controllers/error');
-const mongo = require('./utils/database');
+const mongoose = require('mongoose');
 const User = require('./models/user');
 
 const adminRouter = require('./routes/admin');
@@ -36,9 +36,12 @@ app.use(shopRouter);
 
 app.use(errorController.get404);
 
-mongo.connectDb(() => {
+mongoose.connect('mongodb+srv://admin:password_02@cluster0.lrvxm.mongodb.net/shop?retryWrites=true&w=majority')
+.then(result => {
     app.listen(3000);
-});
+})
+.catch(err => console.log(err));
+
 
 
 
