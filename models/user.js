@@ -86,8 +86,8 @@ class User {
     }
 
     getOrders() {
-        //const db = mongo.getDb();
-        //return d
+        const db = mongo.getDb();
+        return db.collection('order').find({ 'user._id': new mongodb.ObjectId(this._id) }).toArray();
     }
 
     static findById(id) {

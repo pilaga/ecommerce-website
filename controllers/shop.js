@@ -86,9 +86,8 @@ exports.postCartDeleteProduct = (req, res, next) => {
     .catch(err => console.log(err));
 }
 
-/*
 exports.getOrders = (req, res, next) => {
-    req.user.getOrders({ include: ['products']})
+    req.user.getOrders()
     .then(orders => {
         res.render('./shop/orders', 
         { 
@@ -97,10 +96,10 @@ exports.getOrders = (req, res, next) => {
             orders: orders
         });
     })
-    .catch(err => console.log(err));
-    
+    .catch(err => console.log(err));    
 }
 
+/*
 exports.getCheckout = (req, res, next) => {
     res.render('./shop/checkout', 
         { 
