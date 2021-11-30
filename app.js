@@ -55,19 +55,6 @@ app.use(errorController.get404);
 
 mongoose.connect(MONGODB_URI)
 .then(result => {
-    //create dummy user if doesn't exist
-    User.findOne().then(user => {
-        if(!user) {
-            const user = new User({
-                name: 'Pierre',
-                email: 'pierre.lagadec@gmail.com',
-                cart: {
-                    items: []
-                }
-            });
-            user.save();
-        }
-    })
     app.listen(3000);
 })
 .catch(err => console.log(err));
