@@ -32,10 +32,20 @@ app.use(session({
     store: sessionStore
 }));
 
-//store user in request
-/*app.use((req, res, next) => {
-
-});*/
+//grab session user and turn into Mongoose User model
+app.use((req, res, next) => {
+    if(!req.session.user) {
+        return next();
+    }
+    User.findById(req.session.user._id)
+    .then(user => {
+        req.user = user;
+        next();
+    })
+    .catch(err => {
+        console.log(err);
+    }); 
+});
 
 app.use('/admin', adminRouter);
 app.use(shopRouter);
