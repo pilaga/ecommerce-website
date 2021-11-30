@@ -7,6 +7,7 @@ const User = require('./models/user');
 
 const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
+const authRouter = require('./routes/auth');
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use((req, res, next) => {
 
 app.use('/admin', adminRouter);
 app.use(shopRouter);
+app.use(authRouter);
 
 app.use(errorController.get404);
 
