@@ -1,8 +1,9 @@
 const path = require('path');
 const express = require('express');
+const session = require('express-session');
+const mongoose = require('mongoose');
 
 const errorController = require('./controllers/error');
-const mongoose = require('mongoose');
 const User = require('./models/user');
 
 const adminRouter = require('./routes/admin');
@@ -17,6 +18,11 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+    secret: 'my-secret-string',
+    resave: false, //session won't be saved on every response - only if something changes
+    saveUninitialized: false
+}));
 
 //store user in request
 app.use((req, res, next) => {
