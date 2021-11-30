@@ -18,6 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
+//store user in request
 app.use((req, res, next) => {
     User.findById('61a55d2061b0b8551446df25')
     .then(user => {

@@ -8,7 +8,8 @@ exports.getProducts = (req, res, next) => {
             { 
                 products: products,
                 pagetitle: 'Product List', 
-                path: "/products"         
+                path: "/products",
+                isAuthenticated: req.isLoggedIn        
             });
     })
     .catch(err => {
@@ -23,7 +24,8 @@ exports.getProduct = (req, res, next) => {
         {
             product: product,
             pagetitle: `Product informations: ${product.title}`,
-            path: "/products"
+            path: "/products",
+            isAuthenticated: req.isLoggedIn 
         })  
     })
     .catch(err => {
@@ -38,7 +40,8 @@ exports.getIndex = (req, res, next) => {
             { 
                 products: products,
                 pagetitle: 'Shop', 
-                path: "/"         
+                path: "/",
+                isAuthenticated: req.isLoggedIn     
             });
     })
     .catch(err => {
@@ -54,7 +57,8 @@ exports.getCart = (req, res, next) => {
             { 
                 pagetitle: "My Cart",
                 path: "/cart",
-                products: products
+                products: products,
+                isAuthenticated: req.isLoggedIn 
             });
     })    
     .catch(err => {
@@ -90,7 +94,8 @@ exports.getOrders = (req, res, next) => {
         { 
             pagetitle: "My Orders",
             path: "/orders",
-            orders: orders
+            orders: orders,
+            isAuthenticated: req.isLoggedIn 
         });
     })
     .catch(err => console.log(err));    
