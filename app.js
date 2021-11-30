@@ -33,16 +33,9 @@ app.use(session({
 }));
 
 //store user in request
-app.use((req, res, next) => {
-    User.findById('61a55d2061b0b8551446df25')
-    .then(user => {
-        req.user = user;
-        next();
-    })
-    .catch(err => {
-        console.log(err);
-    });
-});
+/*app.use((req, res, next) => {
+
+});*/
 
 app.use('/admin', adminRouter);
 app.use(shopRouter);
