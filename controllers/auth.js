@@ -20,13 +20,29 @@ exports.getSignup = (req, res, next) => {
 }
 
 exports.postLogin = (req, res, next) => {    
-    User.findById('61a55d2061b0b8551446df25')
+    const email = req.body.email;
+    const password = req.body.password;
+    User.findOne({ email: email })
     .then(user => {
-        req.session.user = user;
-        req.session.isLoggedIn = true;
-        req.session.save(() => {
-            res.redirect('/');
-        });        
+        if(!user) {
+            console.log('error: user not found');
+            return res.redirect('/login');
+        }
+        bcrypt.compare(password, user.password)
+        .then(matchResult => {
+            if(matchResult) {
+                req.session.isLoggedIn = true;
+                req.session.user = user;
+                return req.session.save(() => {
+                    res.redirect('/');
+                });   
+            }
+            res.redirect('/login');
+        })
+        .catch(err => {
+            console.log(err);
+            res.redirect('/login');
+        })     
     })
     .catch(err => {
         console.log(err);
@@ -52,19 +68,19 @@ exports.postSignup = (req, res, next) => {
             console.log("error: user already exists");
             return res.redirect('/signup');
         }
-        return bcrypt.hash(password, 12);
-    })
-    .then(hashedPassword => {
-        const newUser = new User({ 
-            email: email,
-            password: hashedPassword,
-            cart: { items: [] }
-        });
-        return newUser.save();
-    })
-    .then(result => {
-        console.log("signup successful")
-        res.redirect('/login');
-    })
+        return bcrypt.hash(password, 12)
+        .then(hashedPassword => {
+            const newUser = new User({ 
+                email: email,
+                password: hashedPassword,
+                cart: { items: [] }
+            });
+            return newUser.save();
+        })
+        .then(result => {
+            console.log("signup successful")
+            res.redirect('/login');
+        })
+    })    
     .catch(err => console.log(err));
 };
