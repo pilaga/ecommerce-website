@@ -3,6 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const MongoDbStore = require('connect-mongodb-session')(session);
 const mongoose = require('mongoose');
+const csrf = require('csurf');
 
 const errorController = require('./controllers/error');
 const User = require('./models/user');
@@ -18,6 +19,7 @@ const sessionStore = new MongoDbStore({
     uri: MONGODB_URI,
     collection: 'sessions'
 });
+const csrfProtection = csrf();
 
 app.set('view engine', 'ejs');
 //app.set('views', 'views'); //default folder is /views, so not required here
@@ -31,6 +33,7 @@ app.use(session({
     saveUninitialized: false,
     store: sessionStore
 }));
+app.use(csrfProtection);
 
 //grab session user and turn into Mongoose User model
 app.use((req, res, next) => {
@@ -45,6 +48,12 @@ app.use((req, res, next) => {
     .catch(err => {
         console.log(err);
     }); 
+});
+
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    next();
 });
 
 app.use('/admin', adminRouter);
