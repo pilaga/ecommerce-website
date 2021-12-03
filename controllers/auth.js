@@ -7,7 +7,7 @@ exports.getLogin = (req, res, next) => {
     { 
         pagetitle: "Login",
         path: "/login",
-        isAuthenticated: false
+        errorMessage: req.flash('error')
     });  
 }
 
@@ -16,7 +16,7 @@ exports.getSignup = (req, res, next) => {
     { 
         pagetitle: "Signup",
         path: "/signup",
-        isAuthenticated: false
+        
     });  
 }
 
@@ -26,7 +26,7 @@ exports.postLogin = (req, res, next) => {
     User.findOne({ email: email })
     .then(user => {
         if(!user) {
-            console.log('error: user not found');
+            req.flash('error', 'Invalid email or password');
             return res.redirect('/login');
         }
         bcrypt.compare(password, user.password)

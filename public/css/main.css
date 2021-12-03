@@ -109,7 +109,7 @@ form {
 .mobile-nav_item a:active,
 .mobile-nav_item a:hover,
 .mobile-nav_item a.active {
-  background: #00695c;
+  background: #257fbe;
   color: white;
   border-radius: 3px;
 }
@@ -205,6 +205,26 @@ form {
   color: white;
 }
 
+.user-message {
+  margin: auto;
+  width: 90%;
+  border: 1px solid #257fbe;
+  color: #257fbe;
+  padding: 1rem;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.user-message--error {
+  margin: auto;
+  width: 90%;
+  border: 1px solid #e43855;
+  color: #e43855;
+  padding: 1rem;
+  border-radius: 3px;
+  text-align: center;
+}
+
 @media (min-width: 768px) {
   .main-header_nav {
     display: flex;
@@ -212,5 +232,9 @@ form {
 
   #side-menu-toggle {
     display: none;
+  }
+
+  .user-message {
+    width: 30rem;
   }
 }

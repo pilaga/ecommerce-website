@@ -4,6 +4,7 @@ const session = require('express-session');
 const MongoDbStore = require('connect-mongodb-session')(session);
 const mongoose = require('mongoose');
 const csrf = require('csurf');
+const cflash = require('connect-flash');
 
 const errorController = require('./controllers/error');
 const User = require('./models/user');
@@ -22,7 +23,6 @@ const sessionStore = new MongoDbStore({
 const csrfProtection = csrf();
 
 app.set('view engine', 'ejs');
-//app.set('views', 'views'); //default folder is /views, so not required here
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
@@ -34,6 +34,7 @@ app.use(session({
     store: sessionStore
 }));
 app.use(csrfProtection);
+app.use(cflash());
 
 //grab session user and turn into Mongoose User model
 app.use((req, res, next) => {
