@@ -33,7 +33,7 @@ exports.postAddProduct = (req, res, next) => {
 }
 
 exports.getProducts = (req, res, next) => {
-    Product.find()
+    Product.find({ userId: req.user._id })
     .then(products => {
         res.render('./admin/product-store', 
             { 
@@ -81,16 +81,19 @@ exports.postEditProduct = (req, res, next) => {
     const updateddesc = req.body.description;
     Product.findById(productId)
     .then(product => {
+        if(product.userId.toString() !== req.user._id.toString()) {
+            return res.redirect('/');
+        } 
         product.title = updatedtitle;
         product.image = updatedimage;
         product.description = updateddesc;
         product.price = updatedprice;
-        return product.save();
-    })
-    .then(result => {
-        console.log('updated product: ', productId);
-        res.redirect('/admin/product-store'); 
-    })
+        return product.save()
+        .then(result => {
+            console.log('updated product: ', productId);
+            res.redirect('/admin/product-store'); 
+        });
+    })    
     .catch(err => {
         console.log(err);
     });
@@ -98,7 +101,7 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
     const productId = req.body.productId;    
-    Product.findByIdAndRemove(productId)
+    Product.deleteOne({ _id: productId, userId: req.user._id })
     .then(() => {
         console.log('destroyed product:', productId);
         res.redirect('/admin/product-store');
