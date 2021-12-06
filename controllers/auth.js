@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
+const { validationResult } = require('express-validator');
 const csrf = require('csurf');
 const User = require('../models/user');
 
@@ -158,6 +159,16 @@ exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        console.log('error!!!! EMAIL!!!!!');
+        return res.status(422).render('./auth/signup', 
+        { 
+            pagetitle: "Signup",
+            path: "/signup",
+            errorMessage: errors.array()        
+        });  
+    }
     //here - check user input
     //check email doesn't exit
     User.findOne({ email: email})
