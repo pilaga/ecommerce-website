@@ -29,6 +29,21 @@ exports.getReset = (req, res, next) => {
     });  
 }
 
+exports.getNewPassword = (req, res, next) => {
+    const token = req.params.token;
+    User.findOne({ resetToken: token, resetTokenExpiration: {$gt: Date.now()} }) //$gt - greater than
+    .then(user => {
+        res.render('./auth/new-password', 
+        { 
+            pagetitle: "Reset Password",
+            path: "/new-password",
+            errorMessage: req.flash('error'),
+            userId: user._id.toString()
+        });  
+    })
+    .catch(err => console.log(err));    
+}
+
 exports.getSignup = (req, res, next) => {
     res.render('./auth/signup', 
     { 
