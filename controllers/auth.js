@@ -38,10 +38,38 @@ exports.getNewPassword = (req, res, next) => {
             pagetitle: "Reset Password",
             path: "/new-password",
             errorMessage: req.flash('error'),
-            userId: user._id.toString()
+            userId: user._id.toString(),
+            token: token
         });  
     })
     .catch(err => console.log(err));    
+}
+
+exports.postNewPassword = (req, res, next) => {
+    const newPassword = req.body.password;
+    const userId = req.body.userId;
+    const token = req.body.token;
+    let resetUser;
+
+    User.findOne({ 
+        _id: userId, 
+        resetToken: token, 
+        resetTokenExpiration: { $gt: Date.now() } 
+    })
+    .then(user => {
+        resetUser = user;
+        return bcrypt.hash(newPassword, 12);
+    })
+    .then(hashedPwd => {
+        resetUser.password = hashedPwd;
+        resetUser.resetToken = undefined;
+        resetUser.resetTokenExpiration = undefined;
+        return resetUser.save();
+    })
+    .then(result => {
+        res.redirect('/login');
+    })
+    .catch(err => console.log(err));
 }
 
 exports.getSignup = (req, res, next) => {
