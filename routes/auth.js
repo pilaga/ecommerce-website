@@ -10,7 +10,9 @@ router.get('/reset', authController.getReset);
 router.get('/reset/:token', authController.getNewPassword)
 router.post('/login', authController.postLogin);
 router.post('/logout', authController.postLogout);
-router.post('/signup', check('email').isEmail(), authController.postSignup);
+router.post('/signup', 
+    check('email').isEmail().withMessage('Email address is invalid'), 
+    authController.postSignup);
 router.post('/reset', authController.postReset);
 router.post('/new-password', authController.postNewPassword);
 

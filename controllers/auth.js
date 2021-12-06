@@ -166,7 +166,7 @@ exports.postSignup = (req, res, next) => {
         { 
             pagetitle: "Signup",
             path: "/signup",
-            errorMessage: errors.array()        
+            errorMessage: errors.array()[0].msg       
         });  
     }
     //here - check user input
