@@ -3,6 +3,7 @@ const router = express.Router();
 const { check, body } = require('express-validator');
 
 const authController = require('../controllers/auth');
+const User = require('../models/user');
 
 router.get('/login', authController.getLogin);
 router.get('/signup', authController.getSignup);
@@ -16,10 +17,12 @@ router.post('/signup',
             .isEmail()
             .withMessage('Email address is invalid')
             .custom((value, {req}) => {
-                if(value === "test@test.com"){
-                    throw new Error ('This email address is forbidden');
-                }
-                return true;
+                return User.findOne({ email: value})
+                .then(user => {
+                    if(user) {
+                        return Promise.reject('User already exists, please use a different email address');
+                    }
+                });
             }),
         body('password', 'Please enter a password with number/text and at least 5 characters')
             .isLength({ min: 5 })        
