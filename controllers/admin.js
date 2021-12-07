@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const Product = require('../models/product');
 
 exports.getAddProduct = (req, res, next) => {
@@ -6,7 +7,9 @@ exports.getAddProduct = (req, res, next) => {
             pagetitle: "Add Product", 
             path: '/admin/add-product',
             editing: false,
-            isAuthenticated: req.session.isLoggedIn 
+            isAuthenticated: req.session.isLoggedIn,
+            hasErrors: false,
+            errorMessage: ""
         });
 }
 
@@ -17,6 +20,26 @@ exports.postAddProduct = (req, res, next) => {
     const image = req.body.image;
     const desc = req.body.description;
     const userId = req.session.user._id;
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        return res.status(422).render('./admin/edit-product', 
+        { 
+            pagetitle: "Add Product", 
+            path: '/admin/add-product',
+            editing: false,
+            isAuthenticated: req.session.isLoggedIn,
+            hasErrors: true,
+            product: {
+                title: title,
+                image: image,
+                description: desc,
+                price: price
+            },
+            errorMessage: errors.array()[0].msg
+        });
+    }
+
     //create and save new product
     const product = new Product({
         title: title, 
@@ -65,7 +88,9 @@ exports.getEditProduct = (req, res, next) => {
                 path: '/admin/edit-product',
                 editing: editMode,
                 product: product,
-                isAuthenticated: req.session.isLoggedIn 
+                isAuthenticated: req.session.isLoggedIn,
+                hasErrors: false,
+                errorMessage: ""
             });
     })
     .catch(err => {
