@@ -9,7 +9,16 @@ router.get('/login', authController.getLogin);
 router.get('/signup', authController.getSignup);
 router.get('/reset', authController.getReset);
 router.get('/reset/:token', authController.getNewPassword)
-router.post('/login', authController.postLogin);
+router.post('/login', 
+    [
+        check('email')
+            .isEmail()
+            .withMessage('Email address is invalid'),
+        body('password', 'Password is invalid')
+            .isLength({ min: 2 })        
+            .isAlphanumeric()
+    ],
+    authController.postLogin);
 router.post('/logout', authController.postLogout);
 router.post('/signup',
     [
