@@ -9,7 +9,8 @@ exports.getAddProduct = (req, res, next) => {
             editing: false,
             isAuthenticated: req.session.isLoggedIn,
             hasErrors: false,
-            errorMessage: ""
+            errorMessage: "",
+            validationErrors: [] 
         });
 }
 
@@ -34,7 +35,8 @@ exports.postAddProduct = (req, res, next) => {
                 title: title,
                 image: image,
                 description: desc,
-                price: price
+                price: price,
+                validationErrors: errors.array() 
             },
             errorMessage: errors.array()[0].msg
         });
@@ -90,7 +92,8 @@ exports.getEditProduct = (req, res, next) => {
                 product: product,
                 isAuthenticated: req.session.isLoggedIn,
                 hasErrors: false,
-                errorMessage: ""
+                errorMessage: "",
+                validationErrors: []
             });
     })
     .catch(err => {
@@ -104,6 +107,29 @@ exports.postEditProduct = (req, res, next) => {
     const updatedprice = req.body.price;
     const updatedimage = req.body.image;
     const updateddesc = req.body.description;
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        return res.status(422).render('./admin/edit-product', 
+        { 
+            pagetitle: `Edit Product: ${updatedtitle}`, 
+            path: '/admin/edit-product',
+            editing: true,
+            isAuthenticated: req.session.isLoggedIn,
+            hasErrors: true,
+            product: {
+                title: updatedtitle,
+                image: updatedimage,
+                description: updateddesc,
+                price: updatedprice,
+                userId: req.body.userId,
+                _id: req.body.productId
+            },
+            errorMessage: errors.array()[0].msg,
+            validationErrors: errors.array() 
+        });
+    }
+
     Product.findById(productId)
     .then(product => {
         if(product.userId.toString() !== req.user._id.toString()) {
