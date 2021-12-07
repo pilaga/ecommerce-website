@@ -17,6 +17,7 @@ router.post('/login',
         body('password', 'Password is invalid')
             .isLength({ min: 2 })        
             .isAlphanumeric()
+            .trim()
     ],
     authController.postLogin);
 router.post('/logout', authController.postLogout);
@@ -32,16 +33,20 @@ router.post('/signup',
                         return Promise.reject('User already exists, please use a different email address');
                     }
                 });
-            }),
+            })
+            .normalizeEmail(),
         body('password', 'Please enter a password with number/text and at least 5 characters')
             .isLength({ min: 5 })        
-            .isAlphanumeric(),
-        body('confirmPassword').custom((value, { req }) => {
-            if(value !== req.body.password) {
-                throw new Error('Passwords do not match!');
-            }
-            return true;
-        })
+            .isAlphanumeric()
+            .trim(),
+        body('confirmPassword')
+            .trim()
+            .custom((value, { req }) => {
+                if(value !== req.body.password) {
+                    throw new Error('Passwords do not match!');
+                }
+                return true;
+            })
     ],
     authController.postSignup);
 router.post('/reset', authController.postReset);
