@@ -17,7 +17,12 @@ exports.getLogin = (req, res, next) => {
     { 
         pagetitle: "Login",
         path: "/login",
-        errorMessage: req.flash('error')
+        errorMessage: req.flash('error'),
+        userInput: {
+            email: "",
+            password: ""
+        },
+        validationErrors: [] 
     });  
 }
 
@@ -98,7 +103,12 @@ exports.postLogin = (req, res, next) => {
         { 
             pagetitle: "Login",
             path: "/login",
-            errorMessage: errors.array()[0].msg  
+            errorMessage: errors.array()[0].msg,
+            userInput: {
+                email: email,
+                password: password
+            },
+            validationErrors: errors.array() 
         });    
     }
 
