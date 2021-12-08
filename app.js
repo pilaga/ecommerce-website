@@ -23,11 +23,20 @@ const sessionStore = new MongoDbStore({
 });
 const csrfProtection = csrf();
 
+const fileStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images');
+    },
+    filename: (req, file, cb) => {
+        cb(null, new Date().toISOString() + '-' + file.originalname);
+    }
+});
+
 app.set('view engine', 'ejs');
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-app.use(multer({ dest: 'images'}).single('image')); //initialize multer to expect single image file called "image"
+app.use(multer({ storage: fileStorage }).single('image')); //initialize multer to expect single image file called "image"
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'my-secret-string',
