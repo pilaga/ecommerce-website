@@ -31,7 +31,7 @@
                     step="0.01" 
                     value="<% if(editing || hasErrors) {%><%= product.price %><% } %>">
             </div>
-            <div class="form-control">
+            <!-- <div class="form-control">
                 <label for="image">Image</label>
                 <input 
                     class="<%= validationErrors.find(e => e.param === 'image') ? 'invalid' : '' %>"
@@ -39,6 +39,14 @@
                     name="image" 
                     id="image" 
                     value="<% if(editing || hasErrors) {%><%= product.image %><% } %>">
+            </div>
+            -->
+            <div class="form-control">
+                <label for="image">Image</label>
+                <input 
+                    type="file" 
+                    name="image" 
+                    id="image">
             </div>
             <div class="form-control">
                 <label for="description">Description</label>
