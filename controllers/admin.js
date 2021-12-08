@@ -45,7 +45,6 @@ exports.postAddProduct = (req, res, next) => {
 
     //create and save new product
     const product = new Product({
-        _id: new mongoose.Types.ObjectId('61a55f4cc0ccb47ab7d2c7c1'),
         title: title, 
         price: price, 
         description: desc, 
@@ -57,7 +56,9 @@ exports.postAddProduct = (req, res, next) => {
         res.redirect('/admin/product-store');
     })
     .catch(err => {
-        return res.redirect('/500');
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
     });
 }
 
@@ -101,7 +102,9 @@ exports.getEditProduct = (req, res, next) => {
             });
     })
     .catch(err => {
-        console.log(err);
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
     });
 }
 
