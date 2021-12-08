@@ -9,7 +9,7 @@ exports.get404 = (req, res, next) => {
 }
 
 exports.get500 = (req, res, next) => {
-    res.status(404)
+    res.status(500)
     .render('500', 
         { 
             pagetitle: "An error occured!",

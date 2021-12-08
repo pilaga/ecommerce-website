@@ -36,6 +36,12 @@ app.use(session({
 app.use(csrfProtection);
 app.use(cflash());
 
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
+
 //grab session user and turn into Mongoose User model
 app.use((req, res, next) => {
     if(!req.session.user) {
@@ -43,6 +49,7 @@ app.use((req, res, next) => {
     }
     User.findById(req.session.user._id)
     .then(user => {
+        
         if(!user) {
             return next();
         }
@@ -54,11 +61,7 @@ app.use((req, res, next) => {
     }); 
 });
 
-app.use((req, res, next) => {
-    res.locals.isAuthenticated = req.session.isLoggedIn;
-    res.locals.csrfToken = req.csrfToken();
-    next();
-});
+
 
 app.use('/admin', adminRouter);
 app.use(shopRouter);
@@ -69,7 +72,14 @@ app.use(errorController.get404);
 
 // "nexting" an error will end up here
 app.use((error, req, res, next) => {
-    res.redirect('/500');
+    //res.redirect('/500');
+    res.status(500)
+    .render('500', 
+        { 
+            pagetitle: "An error occured!",
+            path: "/500",
+            isAuthenticated: req.session.isLoggedIn
+        });
 });
 
 mongoose.connect(MONGODB_URI)
