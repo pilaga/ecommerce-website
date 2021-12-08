@@ -5,6 +5,7 @@ const MongoDbStore = require('connect-mongodb-session')(session);
 const mongoose = require('mongoose');
 const csrf = require('csurf');
 const cflash = require('connect-flash');
+const multer = require('multer');
 
 const errorController = require('./controllers/error');
 const User = require('./models/user');
@@ -26,6 +27,7 @@ app.set('view engine', 'ejs');
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+app.use(multer({ dest: 'images'}).single('image')); //initialize multer to expect single image file called "image"
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'my-secret-string',

@@ -19,7 +19,7 @@ exports.postAddProduct = (req, res, next) => {
     //retrieve data from form
     const title = req.body.title;
     const price = req.body.price;
-    const image = req.body.image;
+    const image = req.file;
     const desc = req.body.description;
     const userId = req.session.user._id;
 

@@ -12,8 +12,6 @@ router.post('/add-product',
             .isString()
             .isLength({ min: 3 })
             .trim(),
-        body('image', 'The image needs to be a valid URL')
-            .isURL(),
         body('price', 'The price needs to be a valid number')
             .isFloat(),
         body('description', 'The description needs at least 5 characters')
@@ -29,8 +27,6 @@ router.post('/edit-product',
             .isString()
             .isLength({ min: 3 })
             .trim(),
-        body('image', 'The image needs to be a valid URL')
-            .isURL(),
         body('price', 'The price needs to be a valid number')
             .isFloat(),
         body('description', 'The description needs at least 5 characters')
