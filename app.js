@@ -51,6 +51,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')); //initialize multer to expect single image file called "image"
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(session({
     secret: 'my-secret-string',
     resave: false, //session won't be saved on every response - only if something changes
