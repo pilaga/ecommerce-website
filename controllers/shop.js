@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Product = require('../models/product');
 const Order = require('../models/order');
+const { encodeXText } = require('nodemailer/lib/shared');
 
 exports.getProducts = (req, res, next) => { 
     Product.find()
@@ -151,15 +152,27 @@ exports.postOrder = (req, res, next) => {
 
 exports.getInvoice = (req, res, next) => {
     const orderId = req.params.orderId;
-    const filename = "invoice-" + orderId + ".pdf";
-    const filepath = path.join('data', 'invoices', filename);
-    //console.log("filepath: " + filepath);
-    fs.readFile(filepath, (err, data) => {
-        if(err) {
-            return next(err);
+    Order.findById(orderId).then(order => {
+        if(!order){
+            return next(new Error('No order found!'));
         }
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'attachment; filename="' + filename + '"');
-        res.send(data);
-    });
+
+        if(order.user.userId.toString() !== req.user._id.toString()) {
+            return encodeXText(new Error('Download unauthorized'));
+        }
+
+        const filename = "invoice-" + orderId + ".pdf";
+        const filepath = path.join('data', 'invoices', filename);
+        //console.log("filepath: " + filepath);
+        fs.readFile(filepath, (err, data) => {
+            if(err) {
+                return next(err);
+            }
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'inline; filename="' + filename + '"');
+            res.send(data);
+        });
+    })
+    .catch(err => next(err));
+    
 };
