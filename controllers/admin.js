@@ -23,6 +23,25 @@ exports.postAddProduct = (req, res, next) => {
     const desc = req.body.description;
     const userId = req.session.user._id;
 
+    if(!image) {
+        return res.status(422).render('./admin/edit-product', 
+        { 
+            pagetitle: "Add Product", 
+            path: '/admin/add-product',
+            editing: false,
+            hasErrors: true,
+            product: {
+                title: title,
+                description: desc,
+                price: price                
+            },
+            errorMessage: 'Attached imge is not valid',
+            validationErrors: []
+        });
+    }
+
+    const imageUrl = image.path;
+
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         return res.status(422).render('./admin/edit-product', 
@@ -30,11 +49,9 @@ exports.postAddProduct = (req, res, next) => {
             pagetitle: "Add Product", 
             path: '/admin/add-product',
             editing: false,
-            isAuthenticated: req.session.isLoggedIn,
             hasErrors: true,
             product: {
                 title: title,
-                image: image,
                 description: desc,
                 price: price                
             },
@@ -48,7 +65,7 @@ exports.postAddProduct = (req, res, next) => {
         title: title, 
         price: price, 
         description: desc, 
-        image: image,
+        image: imageUrl,
         userId: userId
     });
     product.save()
@@ -114,7 +131,7 @@ exports.postEditProduct = (req, res, next) => {
     const productId = req.body.productId;
     const updatedtitle = req.body.title;
     const updatedprice = req.body.price;
-    const updatedimage = req.body.image;
+    const updatedimage = req.file;
     const updateddesc = req.body.description;
 
     const errors = validationResult(req);
@@ -127,8 +144,7 @@ exports.postEditProduct = (req, res, next) => {
             isAuthenticated: req.session.isLoggedIn,
             hasErrors: true,
             product: {
-                title: updatedtitle,
-                image: updatedimage,
+                title: updatedtitle,                
                 description: updateddesc,
                 price: updatedprice,
                 userId: req.body.userId,
@@ -145,7 +161,9 @@ exports.postEditProduct = (req, res, next) => {
             return res.redirect('/');
         } 
         product.title = updatedtitle;
-        product.image = updatedimage;
+        if(updatedimage) {  //only update image if file is provided
+            product.image = updatedimage.path;
+        }
         product.description = updateddesc;
         product.price = updatedprice;
         return product.save()
