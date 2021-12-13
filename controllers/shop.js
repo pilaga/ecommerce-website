@@ -165,9 +165,22 @@ exports.getInvoice = (req, res, next) => {
         const filepath = path.join('data', 'invoices', filename);
 
         const pdfDoc = new PDFDocument();
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'inline; filename="' + filename + '"');
         pdfDoc.pipe(fs.createWriteStream(filepath));
         pdfDoc.pipe(res);
-        pdfDoc.text('Hellow world!');
+        pdfDoc.fontSize(26).text('Invoice', {
+            underline: true
+        });
+        pdfDoc.fontSize(14).text('---------------------------');
+        let totalPrice = 0;
+        order.items.forEach(item => {
+            pdfDoc.text(item.product.title + ' - ' + item.quantity + ' x $' + item.product.price);
+            totalPrice += item.quantity * item.product.price;
+        });
+        pdfDoc.text('---------------------------');
+        pdfDoc.fontSize(20).text('Total price: $' + totalPrice);
+
         pdfDoc.end();
 
         //approach 1 - reading file data (not recommended)
@@ -181,10 +194,10 @@ exports.getInvoice = (req, res, next) => {
         });*/
 
         //approach 2 - streaming file data (recommended)
-        const file = fs.createReadStream(filepath);
+        /*const file = fs.createReadStream(filepath);
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'inline; filename="' + filename + '"');
-        file.pipe(res);
+        file.pipe(res);*/
     })
     .catch(err => next(err));
     
