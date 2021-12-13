@@ -156,22 +156,27 @@ exports.getInvoice = (req, res, next) => {
         if(!order){
             return next(new Error('No order found!'));
         }
-
         if(order.user.userId.toString() !== req.user._id.toString()) {
             return encodeXText(new Error('Download unauthorized'));
         }
-
         const filename = "invoice-" + orderId + ".pdf";
         const filepath = path.join('data', 'invoices', filename);
-        //console.log("filepath: " + filepath);
-        fs.readFile(filepath, (err, data) => {
+
+        //approach 1 - reading file data (not recommended)
+        /*fs.readFile(filepath, (err, data) => {
             if(err) {
                 return next(err);
             }
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', 'inline; filename="' + filename + '"');
             res.send(data);
-        });
+        });*/
+
+        //approach 2 - streaming file data (recommended)
+        const file = fs.createReadStream(filepath);
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'inline; filename="' + filename + '"');
+        file.pipe(res);
     })
     .catch(err => next(err));
     
