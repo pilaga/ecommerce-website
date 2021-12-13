@@ -1,1 +1,1 @@
-Complete NodeJS implementation of an online shop application using ExpressJS, EJS, MongoDB, GraphQL APIs, 
+Complete NodeJS implementation of an online shop application using ExpressJS, EJS templating engine, MongoDB, GraphQL APIs, PDFKit

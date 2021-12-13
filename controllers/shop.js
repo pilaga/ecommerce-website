@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const PDFDocument = require('pdfkit');
+
 const Product = require('../models/product');
 const Order = require('../models/order');
 const { encodeXText } = require('nodemailer/lib/shared');
@@ -161,6 +163,12 @@ exports.getInvoice = (req, res, next) => {
         }
         const filename = "invoice-" + orderId + ".pdf";
         const filepath = path.join('data', 'invoices', filename);
+
+        const pdfDoc = new PDFDocument();
+        pdfDoc.pipe(fs.createWriteStream(filepath));
+        pdfDoc.pipe(res);
+        pdfDoc.text('Hellow world!');
+        pdfDoc.end();
 
         //approach 1 - reading file data (not recommended)
         /*fs.readFile(filepath, (err, data) => {
