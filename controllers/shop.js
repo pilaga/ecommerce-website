@@ -43,7 +43,7 @@ exports.getProduct = (req, res, next) => {
 }
 
 exports.getIndex = (req, res, next) => {
-    const page = req.query.page;
+    const page = +req.query.page || 1;
     let totalItems;
 
     Product.find().countDocuments()
@@ -60,7 +60,7 @@ exports.getIndex = (req, res, next) => {
                 pagetitle: 'Shop', 
                 path: "/",
                 //pagination parameters:
-                totalproducts: totalItems,
+                currentPage: page,
                 hasNextPage: ITEMS_PER_PAGE * page < totalItems,
                 hasPreviousPage: page > 1,
                 nextPage: page + 1,
