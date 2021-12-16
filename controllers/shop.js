@@ -9,20 +9,36 @@ const { encodeXText } = require('nodemailer/lib/shared');
 const ITEMS_PER_PAGE = 2;
 
 exports.getProducts = (req, res, next) => { 
-    Product.find()
+    const page = +req.query.page || 1;
+    let totalItems;
+
+    Product.find().countDocuments()
+    .then(count => {
+        totalItems = count;
+        return Product.find()
+            .skip((page - 1) * ITEMS_PER_PAGE)
+            .limit(ITEMS_PER_PAGE);
+    })    
     .then(products => {
         res.render('./shop/product-list', 
             { 
                 products: products,
-                pagetitle: 'Product List', 
-                path: "/products" 
+                pagetitle: 'Products List', 
+                path: "/products",
+                //pagination parameters:
+                currentPage: page,
+                hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+                hasPreviousPage: page > 1,
+                nextPage: page + 1,
+                previousPage: page - 1,
+                lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
             });
     })
     .catch(err => {
         const error = new Error(err);
         error.httpStatusCode = 500;
         return next(error);
-    });  
+    }); 
 }
 
 exports.getProduct = (req, res, next) => {
