@@ -183,15 +183,14 @@ exports.postEditProduct = (req, res, next) => {
 }
 
 exports.postDeleteProduct = (req, res, next) => {
-    const productId = req.body.productId;
-    //delete image
+    const productId = req.body.productId;    
     Product.findById(productId)
     .then(product => {
         if(!product) {
             return next(new Error('Product not found!'));
         }
+        //delete image
         fileHelper.deleteFile(product.image);
-
         //delete product
         return Product.deleteOne({ _id: productId, userId: req.user._id });
     })
