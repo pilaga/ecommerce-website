@@ -6,6 +6,7 @@ const adminController = require('../controllers/admin');
 const isAuth = require('../middleware/is-auth');
 
 router.get('/add-product', isAuth, adminController.getAddProduct);
+
 router.post('/add-product', 
     [
         body('title', 'The title is invalid')
@@ -19,8 +20,11 @@ router.post('/add-product',
             .trim()
     ],
     isAuth, adminController.postAddProduct);
+
 router.get('/product-store', isAuth, adminController.getProducts);
+
 router.get('/edit-product/:productId', isAuth, adminController.getEditProduct);
+
 router.post('/edit-product', 
     [
         body('title', 'The title is invalid')
@@ -34,6 +38,8 @@ router.post('/edit-product',
             .trim()
     ],
     isAuth, adminController.postEditProduct);
-router.post('/delete-product', isAuth, adminController.postDeleteProduct);
+
+//router.post('/delete-product', isAuth, adminController.postDeleteProduct);
+router.delete('/product/:productId', isAuth, adminController.deleteProduct);
 
 module.exports = router;
