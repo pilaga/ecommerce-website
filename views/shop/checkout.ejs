@@ -2,13 +2,25 @@
 
     <link rel="stylesheet" href="/css/forms.css">
     <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/cart.css">
 </head>
 <body>
     
     <%- include('../includes/navigation.ejs') %>
 
     <main>
-        <h2>Checkout</h2>
+        <ul  class="cart_item-list">
+            <% products.forEach(item => { %>
+                <li class="cart_item">
+                    <h3><%= item.productId.title %></h3>
+                    <h4>Quantity: <%= item.quantity %></h4>
+
+                </li>
+            <% }); %>
+        </ul>
+        <div class="centered">
+            <h2>Total: <%= total %></h2> 
+        </div>
     </main>
 
 <%- include('../includes/footer.ejs') %>
