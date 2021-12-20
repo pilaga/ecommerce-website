@@ -19,7 +19,21 @@
             <% }); %>
         </ul>
         <div class="centered">
-            <h2>Total: <%= total %></h2> 
+            <h2>Total: $<%= total %></h2> 
+        </div>
+        <div class="centered">
+            <button id="order-btn" class="btn">ORDER</button>
+            <script src="https://js.stripe.com/v3/"></script>
+            <script>
+                var stripe = Stripe('pk_test_51K8bOEC63SM0iy72t17AQHwVoGTieH0i6WhtXTnHPXxhRtSmVLKr6yv9lPxk7jN3idXqV6EjffuoNul3cHvznTz400edA2J2Z7');
+                var orderBtn = document.getElementById('order-btn');
+                orderBtn.addEventListener('click', function() {
+                    stripe.redirectToCheckout({
+                        sessionId: '<%=  sessionId %>',
+
+                    });
+                });
+            </script>
         </div>
     </main>
 
