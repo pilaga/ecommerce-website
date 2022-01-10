@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const csrf = require('csurf');
 const cflash = require('connect-flash');
 const multer = require('multer');
+const helmet = require('helmet');
 
 const errorController = require('./controllers/error');
 const User = require('./models/user');
@@ -17,6 +18,7 @@ const authRouter = require('./routes/auth');
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.lrvxm.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`;
 
 const app = express();
+
 const sessionStore = new MongoDbStore({
     uri: MONGODB_URI,
     collection: 'sessions'
@@ -46,6 +48,7 @@ const fileFilter = (req, file, cb) => {
 
 app.set('view engine', 'ejs');
 
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')); //initialize multer to expect single image file called "image"
