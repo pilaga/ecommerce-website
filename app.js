@@ -7,6 +7,7 @@ const csrf = require('csurf');
 const cflash = require('connect-flash');
 const multer = require('multer');
 const helmet = require('helmet');
+const compression = require('compression');
 
 const errorController = require('./controllers/error');
 const User = require('./models/user');
@@ -49,6 +50,8 @@ const fileFilter = (req, file, cb) => {
 app.set('view engine', 'ejs');
 
 app.use(helmet());
+app.use(compression());
+
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')); //initialize multer to expect single image file called "image"
