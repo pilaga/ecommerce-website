@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const express = require('express');
 const session = require('express-session');
 const MongoDbStore = require('connect-mongodb-session')(session);
@@ -8,6 +9,7 @@ const cflash = require('connect-flash');
 const multer = require('multer');
 const helmet = require('helmet');
 const compression = require('compression');
+const morgan = require('morgan');
 
 const errorController = require('./controllers/error');
 const User = require('./models/user');
@@ -51,6 +53,13 @@ app.set('view engine', 'ejs');
 
 app.use(helmet());
 app.use(compression());
+
+const accessLogStream = fs.createWriteStream(
+    path.join(__dirname, 'access.log'), 
+    { 
+        flags: 'a' 
+    });
+app.use(morgan('combined', { stream: accessLogStream }));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
