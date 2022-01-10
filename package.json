@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Online shop app",
   "main": "app.js",
+  "engines": {
+    "node": "16.8.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "SET NODE_ENV=production&& SET MONGO_USER=admin&& SET MONGO_PASSWORD=password_02&& SET MONGO_DEFAULT_DATABASE=shop&& SET STRIPE_KEY=sk_test && node app.js",
