@@ -14,7 +14,7 @@ const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
 const authRouter = require('./routes/auth');
 
-const MONGODB_URI = 'mongodb+srv://admin:password_02@cluster0.lrvxm.mongodb.net/shop?retryWrites=true&w=majority';
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.lrvxm.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`;
 
 const app = express();
 const sessionStore = new MongoDbStore({
@@ -42,8 +42,7 @@ const fileFilter = (req, file, cb) => {
     } else {
       cb(null, false);
     }
-};
-  
+};  
 
 app.set('view engine', 'ejs');
 
@@ -86,8 +85,6 @@ app.use((req, res, next) => {
     }); 
 });
 
-
-
 app.use('/admin', adminRouter);
 app.use(shopRouter);
 app.use(authRouter);
@@ -107,9 +104,10 @@ app.use((error, req, res, next) => {
         });
 });
 
+//console.log("USER: ", process.env.MONGO_USER);
 mongoose.connect(MONGODB_URI)
 .then(result => {
-    app.listen(3000);
+    app.listen(process.env.PORT || 3000);
 })
 .catch(err => console.log(err));
 
