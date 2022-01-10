@@ -127,11 +127,14 @@ app.use((error, req, res, next) => {
 //console.log("USER: ", process.env.MONGO_USER);
 mongoose.connect(MONGODB_URI)
 .then(result => {
-    https.createServer({
+    //HTTPS EXAMPLE
+    /*https.createServer({
         key: privateKey,
         cert: certificate
     }, app)
-    .listen(process.env.PORT || 3000);
+    .listen(process.env.PORT || 3000);*/
+    //HTTP
+    app.listen(process.env.PORT || 3000);
 })
 .catch(err => console.log(err));
 
